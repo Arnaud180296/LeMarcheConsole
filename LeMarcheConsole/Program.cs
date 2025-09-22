@@ -19,7 +19,7 @@
 
         if (IsDuplicate(fruitBasket, fruit))
         {
-            Console.WriteLine($"Seule une occurence de {fruit} peut etre acheté à la fois");
+            Console.WriteLine($"Seule une occurence de \"{fruit}\" peut etre acheté à la fois, par conséquent \"{fruit}\" ne sera pas ajouté au panier");
             return fruitBasket;
         }
 
@@ -82,11 +82,20 @@
         Console.WriteLine($"\"{fruitToFind}\" n'existe pas dans le panier");
         return;
     }
-
+    /*
+     * Mise à jour de InputFruit() et de la saisie choice =>
+        Prise en charge du warning CS8602 : Déréférencement d'une éventuelle référence null.*
+     
+     */
     public static string InputFruit()
     {
         Console.Write("Saisir le nom du fruit en question : ");
-        return Console.ReadLine().ToLower();
+        string? input = (Console.ReadLine() ?? "").ToLower();
+
+        if (input != null && input != "")
+            return input;
+
+        return InputFruit();
     }
 
     public static bool IsDuplicate(string[] fruitBasket, string fruit)
@@ -105,10 +114,10 @@
     public static void Main(string[] args)
     {
         bool loop = true;
-        string[] menuOptions = ["Afficher", "Ajouter", "Rechercher", "Supprimer", "Quitter"];
+        string[] menuOptions = ["[A]fficher", "[Aj]outer", "[R]echercher", "[S]upprimer", "[Q]uitter"];
         const int BASKETFRUITLIMIT = 5;
         string[] fruitBasket = new string[0];
-        string choice;
+        string? choice;
         string fruit;
 
 
@@ -120,39 +129,39 @@
             DisplayMenu(menuOptions);
 
             Console.Write("Saisir l'option souhaitée : ");
-            choice = Console.ReadLine().ToLower();
+            choice = (Console.ReadLine() ?? "").ToLower();
             if (choice == null || choice == "")
                 continue;
 
             switch (choice)
             {
-                case "afficher":
+                case "afficher" or "a":
                     Console.Clear();
                     DisplayFruitBasket(fruitBasket);
                     break;
 
-                case "ajouter":
+                case "ajouter" or "aj":
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;
                     fruit = InputFruit();
                     fruitBasket = AddFruit(fruitBasket, fruit, BASKETFRUITLIMIT);
                     break;
 
-                case "rechercher":
+                case "rechercher" or "r":
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     fruit = InputFruit();
                     FindFruitBasket(fruitBasket, fruit);
                     break;
 
-                case "supprimer":
+                case "supprimer" or "s":
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Red;
                     fruit = InputFruit();
                     fruitBasket = RemoveFruit(fruitBasket, fruit);
                     break;
 
-                case "quitter":
+                case "quitter" or "q":
                     loop = false;
                     break;
 
@@ -165,5 +174,6 @@
             
         }
         Console.WriteLine("Fin du programme...");
+        return;
     }
 }
