@@ -121,6 +121,7 @@
 
     public static void GoBackMainMenu()
     {
+        Console.WriteLine("");
         do
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -151,9 +152,10 @@
 
     public static bool IsFruitBasketEmpty(string[] fruitBasket)
     {
-        if (fruitBasket.Length == 0)
+        if (fruitBasket.Length < 1)
         {
             Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Aucun fruit trouvé dans le panier...");
             Console.BackgroundColor = ConsoleColor.Black;
             return true;
@@ -163,7 +165,7 @@
 
     public static string[] RemoveFruit(string[] fruitBasket, string fruitToRemove)
     {
-        if (fruitBasket.Length < 1)
+        if (IsFruitBasketEmpty(fruitBasket))
             return fruitBasket;
 
         foreach (string fruit in fruitBasket)
@@ -172,9 +174,12 @@
             {
                 //etape de suppression
                 Console.WriteLine($"\"{fruitToRemove}\" a été retiré du panier");
+                return fruitBasket;
             }
         }
-     
+        Console.WriteLine($"\"{fruitToRemove}\" ne se trouve pas dans le panier");
+        GoBackMainMenu();
+
         return fruitBasket;
     }
 
@@ -192,6 +197,11 @@
         //https://learn.microsoft.com/fr-fr/dotnet/api/system.consolekey?view=net-8.0
         //https://learn.microsoft.com/fr-fr/dotnet/api/system.consolekeyinfo?view=net-8.0
         //https://learn.microsoft.com/fr-fr/dotnet/api/system.consolekeyinfo?view=net-8.0
+
+        /*
+         * *
+         * Voir pour regrouper certains changement de couleur en fonction de l'etat des methode de controle
+         */
 
         while (loop)
         {
