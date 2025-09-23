@@ -88,7 +88,7 @@
         return;
     }
     public static void DisplayMenu(string[] menuOptions)
-    {
+    {   
         Console.WriteLine("[_Options disponible_]");
         Foo(menuOptions);
         Console.ResetColor();
