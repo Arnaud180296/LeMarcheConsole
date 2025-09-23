@@ -13,12 +13,6 @@
         if(IsFruitBasketFull(fruitBasket, fruit, BASKETFRUITLIMIT))
             return fruitBasket;
 
-        if (IsDuplicate(fruitBasket, fruit))
-        {
-            Console.WriteLine($"Seule une occurence de \"{fruit}\" peut etre acheté à la fois, par conséquent \"{fruit}\" ne sera pas ajouté au panier");
-            return fruitBasket;
-        }
-
         //===============CopyOldTabValuesToNewTab=========================
         //Ceci doit etre factorisé dans la methode CopyOldTabValuesToNewTab(fruitBasket);
         string[] newFruitBasket = new string[fruitBasket.Length + 1];
@@ -60,9 +54,6 @@
     }
     public static void DisplayFruitBasket(string[] fruitBasket)
     {
-        if (IsFruitBasketEmpty(fruitBasket))
-            return;
-
         Console.WriteLine("Voici le contenu du panier : ");
         Foo(fruitBasket);
         
@@ -154,10 +145,18 @@
         return InputFruit();
     }
 
-    public static bool IsDuplicate(string[] fruitBasket, string fruit)
+    public static bool IsDuplicate(string[] fruitBasket, string fruitToCheck)
     {
-        //TODO : ...
-        //a déjà été acheté
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        foreach (string fruit in fruitBasket)
+        {
+            if (fruitToCheck == fruit)
+            {
+                Console.WriteLine($"Seule une occurence de \"{fruit}\" peut etre acheté à la fois,\npar conséquent \"{fruit}\" ne sera pas ajouté au panier");
+                GoBackMainMenu();
+                return true;
+            }
+        }
         return false;
     }
 
@@ -224,6 +223,8 @@
             {
                 case "afficher" or "a":
                     Console.Clear();
+                    if (IsFruitBasketEmpty(fruitBasket))
+                        continue;
                     DisplayFruitBasket(fruitBasket);
                     break;
 
@@ -231,6 +232,8 @@
                     //Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;
                     fruit = InputFruit();
+                    if(IsDuplicate(fruitBasket, fruit))
+                        continue;
                     fruitBasket = AddFruit(fruitBasket, fruit, BASKETFRUITLIMIT);
                     break;
 
