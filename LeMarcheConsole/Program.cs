@@ -10,14 +10,8 @@
         ///<param name="BASKETFRUITLIMIT"> Constante de type entier definissant la taille maximale du panier</param>
         ///<returns>Renvoie un tableau de string, servant à représenter le panier à fruit, après ajout d'un nouvel élément</returns>
 
-        if (fruitBasket.Length > BASKETFRUITLIMIT - 1)
-        {
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Le panier est plein, \"{fruit}\" n'a donc pas été ajouté au panier");
-            Console.BackgroundColor = ConsoleColor.Black;
+        if(IsFruitBasketFull(fruitBasket, fruit, BASKETFRUITLIMIT))
             return fruitBasket;
-        }
 
         if (IsDuplicate(fruitBasket, fruit))
         {
@@ -26,7 +20,7 @@
         }
 
         //===============CopyOldTabValuesToNewTab=========================
-        //Ceci doit etre factoriser dans la methode CopyOldTabValuesToNewTab(fruitBasket);
+        //Ceci doit etre factorisé dans la methode CopyOldTabValuesToNewTab(fruitBasket);
         string[] newFruitBasket = new string[fruitBasket.Length + 1];
         //Console.WriteLine(newFruitBasket.Length);
         if (fruitBasket.Length > 0)
@@ -44,6 +38,19 @@
         Console.ResetColor();
         Console.Clear();
         return newFruitBasket;
+    }
+
+    public static bool IsFruitBasketFull(string[] fruitBasket, string fruit, int BASKETFRUITLIMIT)
+    {
+        if (fruitBasket.Length > BASKETFRUITLIMIT - 1)
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"Le panier est plein, \"{fruit}\" n'a donc pas été ajouté au panier");
+            Console.BackgroundColor = ConsoleColor.Black;
+            return true;
+        }
+        return false;
     }
 
     public static string[] CopyOldTabValuesToNewTab(string[] fruitBasket)
