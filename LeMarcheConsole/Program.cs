@@ -1,4 +1,6 @@
-﻿internal class Program
+﻿using System.Runtime.InteropServices;
+
+internal class Program
 {
     public static string[] AddFruit(string[] fruitBasket, string fruit, int BASKETFRUITLIMIT)
     {
@@ -13,49 +15,47 @@
         if(IsFruitBasketFull(fruitBasket, fruit, BASKETFRUITLIMIT))
             return fruitBasket;
 
-        //===============CopyOldTabValuesToNewTab=========================
-        //Ceci doit etre factorisé dans la methode CopyOldTabValuesToNewTab(fruitBasket);
-        string[] newFruitBasket = new string[fruitBasket.Length + 1];
-        //Console.WriteLine(newFruitBasket.Length);
-        if (fruitBasket.Length > 0)
-        {
-            for (int i = 0; i < fruitBasket.Length; i++)
-            {
-                //Console.WriteLine("TEST : Je n'entre pas dans la boucle la premiere fois...");
-                newFruitBasket[i] = fruitBasket[i];
-            }
-        }
+        string[] newFruitBasket = new string[fruitBasket.Length + 1]; 
+            
+        if(fruitBasket.Length > 0)
+            newFruitBasket = CopyOldTabValuesToNewTab(fruitBasket);
+
         newFruitBasket[fruitBasket.Length] = fruit;
-        Console.Beep(2100, 200);
-        Console.Beep(2100, 200);
-        //=====================
-        Console.ResetColor();
-        Console.Clear();
+        
         return newFruitBasket;
     }
-
-    public static bool IsFruitBasketFull(string[] fruitBasket, string fruit, int BASKETFRUITLIMIT)
+    public static void ConfirmAddBeep()
     {
-        if (fruitBasket.Length > BASKETFRUITLIMIT - 1)
+        ///<summary>
+        /// Emet deux bips sonores, si l'application est executée dans un environnement Windows.
+        ///</summary>
+      
+        if (OperatingSystem.IsWindows())
         {
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Le panier est plein, \"{fruit}\" n'a donc pas été ajouté au panier");
-            Console.BackgroundColor = ConsoleColor.Black;
-            return true;
+            Console.Beep(2100, 200);
+            Console.Beep(2100, 200);
         }
-        return false;
+        return;
     }
-
     public static string[] CopyOldTabValuesToNewTab(string[] fruitBasket)
     {
-        string[] newFruitBasket = new string[fruitBasket.Length + 1];   
+        ///<summary>
+        /// Copie les éléments d'un tableau de string dans un second tableau de string avant de le renvoyer.
+        ///</summary>
+        ///<param name="fruitBasket"> Tableau à une dimension de chaine de caracteres qui doit etre copié</param>
+        ///<returns>Renvoie un tableau de string, servant à représenter le panier à fruit, après ajout d'un nouvel élément</returns>
+        string[] newFruitBasket = new string[fruitBasket.Length + 1];
+
+        for (int i = 0; i < fruitBasket.Length; i++)
+        {
+            newFruitBasket[i] = fruitBasket[i];
+        }
         return newFruitBasket;
     }
     public static void DisplayFruitBasket(string[] fruitBasket)
     {
         Console.WriteLine("Voici le contenu du panier : ");
-        Foo(fruitBasket);
+        SetAlternateBackgroundColor(fruitBasket);
         
         Console.ResetColor();
 
@@ -65,38 +65,18 @@
         return;
     }
     
-    public static void Foo(string[] elements) //TODO : Trouver un nom de methode plus adequat
-    {
-        int i = 0;
-        foreach (string element in elements)
-        {
-            if (i % 2 == 0)
-            {
-                Console.BackgroundColor = ConsoleColor.DarkGray;
-            }
-            else
-            {
-                Console.BackgroundColor = ConsoleColor.Gray;
-                Console.ForegroundColor = ConsoleColor.Black;
-            }
-            Console.WriteLine($"\t> {element}");
-            i++;
-        }
-        
-        return;
-    }
     public static void DisplayMenu(string[] menuOptions)
     {   
         Console.WriteLine("[_Options disponible_]");
-        Foo(menuOptions);
+        SetAlternateBackgroundColor(menuOptions);
         Console.ResetColor();
         return;
     }
 
+    #region FindMethods
     public static void FindFruitBasket(string[] fruitBasket, params string[] fruitsToFind)
     {
-        //TODO faire une surcharge de methode pour que si plus de 1 fruit est recherché
-        //la surcharge est appelée. Pour gerer les parametres multiple UTILISER ...nomParam
+        //TODO faire une surcharge de methode pour rechercher plus de 1 fruit à la fois.
         foreach (var fruit in fruitsToFind)
         {
             
@@ -119,6 +99,7 @@
 
         return;
     }
+    #endregion FindMethods
 
     public static void GoBackMainMenu()
     {
@@ -145,6 +126,7 @@
         return InputFruit();
     }
 
+    #region CheckMethods
     public static bool IsDuplicate(string[] fruitBasket, string fruitToCheck)
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -173,13 +155,27 @@
         return false;
     }
 
+    public static bool IsFruitBasketFull(string[] fruitBasket, string fruit, int BASKETFRUITLIMIT)
+    {
+        if (fruitBasket.Length > BASKETFRUITLIMIT - 1)
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"Le panier est plein, \"{fruit}\" n'a donc pas été ajouté au panier");
+            Console.BackgroundColor = ConsoleColor.Black;
+            return true;
+        }
+        return false;
+    }
+    #endregion CheckMethods
+
     public static string[] RemoveFruit(string[] fruitBasket, string fruitToRemove)
     {
         foreach (string fruit in fruitBasket)
         {
             if (fruit == fruitToRemove)
             {
-                //etape de suppression
+                //TODO : etape de suppression (j'ai besoin de refactoriser la methode addFruit et CopyOld... avant d'implementer la suppression)
                 Console.WriteLine($"Le fruit \"{fruitToRemove}\" a été retiré du panier");
                 return fruitBasket;
             }
@@ -190,7 +186,27 @@
         return fruitBasket;
     }
 
-    public static void Main(string[] args)
+    public static void SetAlternateBackgroundColor(string[] elements)
+    {
+        int i = 0;
+        foreach (string element in elements)
+        {
+            if (i % 2 == 0)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkGray;
+            }
+            else
+            {
+                Console.BackgroundColor = ConsoleColor.Gray;
+                Console.ForegroundColor = ConsoleColor.Black;
+            }
+            Console.WriteLine($"\t> {element}");
+            i++;
+        }
+        return;
+    }
+
+    public static void Main()
     {
         string apple = "\U0001F34F";
         string banana = "\U0001F34C";
@@ -203,10 +219,13 @@
         string? choice;
         string fruit;
 
-        /*
-         * *
-         * Voir pour regrouper certains changement de couleur en fonction de l'etat des methode de controle
-         */
+        /* TODO
+         * 1 : Implementer CopyOldTabValuesToNewTab() ✅
+         * 2 : Implementer RemoveFruit()
+         * 3 : Penser à regrouper les changements de couleurs
+         * 4 : Tenter de surcharcher FindFruitBasket() pour quelle puisse accepter plusieurs valeurs.
+         * 5 : Respecter le principe de single responsability et mettre le methode dans les cases.
+         * **/
 
         while (loop)
         {
@@ -235,6 +254,9 @@
                     if(IsDuplicate(fruitBasket, fruit))
                         continue;
                     fruitBasket = AddFruit(fruitBasket, fruit, BASKETFRUITLIMIT);
+
+                    Console.ResetColor();
+                    Console.Clear();
                     break;
 
                 case "rechercher" or "r":
