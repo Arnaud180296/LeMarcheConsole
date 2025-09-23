@@ -81,15 +81,18 @@
                 Console.BackgroundColor = ConsoleColor.Gray;
                 Console.ForegroundColor = ConsoleColor.Black;
             }
-            Console.WriteLine($"\t+ {element}");
+            Console.WriteLine($"\t> {element}");
             i++;
         }
+        
+        return;
     }
     public static void DisplayMenu(string[] menuOptions)
     {
         Console.WriteLine("[_Options disponible_]");
         Foo(menuOptions);
         Console.ResetColor();
+        return;
     }
 
     public static void FindFruitBasket(string[] fruitBasket, params string[] fruitsToFind)
@@ -107,7 +110,7 @@
         {
             if (fruit == fruitToFind)
             {
-                Console.WriteLine($"{fruitToFind} a déjà été acheté");
+                Console.WriteLine($"Le fruit : \"{fruitToFind}\" est bel et bien dans la panier");
                 GoBackMainMenu();
                 return;
             }
@@ -147,6 +150,7 @@
     public static bool IsDuplicate(string[] fruitBasket, string fruit)
     {
         //TODO : ...
+        //a déjà été acheté
         return false;
     }
 
@@ -156,7 +160,7 @@
         {
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Aucun fruit trouvé dans le panier...");
+            Console.WriteLine("Le panier est vide...");
             Console.BackgroundColor = ConsoleColor.Black;
             return true;
         }
@@ -165,15 +169,12 @@
 
     public static string[] RemoveFruit(string[] fruitBasket, string fruitToRemove)
     {
-        if (IsFruitBasketEmpty(fruitBasket))
-            return fruitBasket;
-
         foreach (string fruit in fruitBasket)
         {
             if (fruit == fruitToRemove)
             {
                 //etape de suppression
-                Console.WriteLine($"\"{fruitToRemove}\" a été retiré du panier");
+                Console.WriteLine($"Le fruit \"{fruitToRemove}\" a été retiré du panier");
                 return fruitBasket;
             }
         }
@@ -185,18 +186,16 @@
 
     public static void Main(string[] args)
     {
-        Console.Title = "Jeu du marché";
+        string apple = "\U0001F34F";
+        string banana = "\U0001F34C";
+        Console.Title = $" {apple} Jeu du marché {banana}";
+
         bool loop = true;
         string[] menuOptions = ["[A]fficher", "[Aj]outer", "[R]echercher", "[S]upprimer", "[Q]uitter"];
         const int BASKETFRUITLIMIT = 5;
         string[] fruitBasket = new string[0];
         string? choice;
         string fruit;
-
-        //LIRE CECI POUR INTEGRER LA GESTION DU CLAVIER
-        //https://learn.microsoft.com/fr-fr/dotnet/api/system.consolekey?view=net-8.0
-        //https://learn.microsoft.com/fr-fr/dotnet/api/system.consolekeyinfo?view=net-8.0
-        //https://learn.microsoft.com/fr-fr/dotnet/api/system.consolekeyinfo?view=net-8.0
 
         /*
          * *
@@ -231,6 +230,8 @@
                 case "rechercher" or "r":
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Yellow;
+                    if (IsFruitBasketEmpty(fruitBasket))
+                        continue;
                     fruit = InputFruit();
                     FindFruitBasket(fruitBasket, fruit);
                     break;
@@ -238,6 +239,8 @@
                 case "supprimer" or "s":
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Red;
+                    if (IsFruitBasketEmpty(fruitBasket))
+                        continue;
                     fruit = InputFruit();
                     fruitBasket = RemoveFruit(fruitBasket, fruit);
                     break;
