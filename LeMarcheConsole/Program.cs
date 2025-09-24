@@ -206,6 +206,17 @@ internal class Program
         return;
     }
 
+    public static void ChangeColors(string choice)
+    {
+        if (choice == "a" || choice == "afficher")
+            Console.WriteLine("blanc");
+        else if(choice == "aj" || choice == "ajouter")
+            Console.ForegroundColor = ConsoleColor.Green;
+        else if(choice == "r" || choice == "rechercher")
+            Console.ForegroundColor = ConsoleColor.Yellow;
+        else if (choice == "s" || choice == "supprimer")
+            Console.ForegroundColor = ConsoleColor.Red;
+    }
     public static void Main()
     {
         string apple = "\U0001F34F";
@@ -249,7 +260,7 @@ internal class Program
 
                 case "ajouter" or "aj":
                     //Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    ChangeColors(choice);
                     fruit = InputFruit();
                     if(IsDuplicate(fruitBasket, fruit))
                         continue;
@@ -261,7 +272,7 @@ internal class Program
 
                 case "rechercher" or "r":
                     Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    ChangeColors(choice);
                     if (IsFruitBasketEmpty(fruitBasket))
                         continue;
                     fruit = InputFruit();
@@ -270,7 +281,7 @@ internal class Program
 
                 case "supprimer" or "s":
                     Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    ChangeColors(choice);
                     if (IsFruitBasketEmpty(fruitBasket))
                         continue;
                     fruit = InputFruit();
