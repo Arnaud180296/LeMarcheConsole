@@ -12,11 +12,22 @@ internal class Program
         ///<param name="BASKETFRUITLIMIT"> Constante de type entier definissant la taille maximale du panier</param>
         ///<returns>Renvoie un tableau de string, servant à représenter le panier à fruit, après ajout d'un nouvel élément</returns>
 
-       
-
         fruitBasket[fruitBasket.Length - 1] = fruit;
         return fruitBasket;
     }
+
+    public static void ChangeColors(string choice)
+    {
+        if (choice == "a" || choice == "afficher")
+            Console.WriteLine("blanc");
+        else if (choice == "aj" || choice == "ajouter")
+            Console.ForegroundColor = ConsoleColor.Green;
+        else if (choice == "r" || choice == "rechercher")
+            Console.ForegroundColor = ConsoleColor.Yellow;
+        else if (choice == "s" || choice == "supprimer")
+            Console.ForegroundColor = ConsoleColor.Red;
+    }
+
     public static void ConfirmAddBeep()
     {
         ///<summary>
@@ -43,8 +54,7 @@ internal class Program
         {
             newFruitBasket[i] = fruitBasket[i];
         }
-        Console.WriteLine($"{newFruitBasket.Length}");
-        Thread.Sleep(2000);
+
         return newFruitBasket;
     }
     public static void DisplayFruitBasket(string[] fruitBasket)
@@ -144,7 +154,9 @@ internal class Program
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Le panier est vide...");
+            Thread.Sleep(750);
             Console.BackgroundColor = ConsoleColor.Black;
+            Console.Clear();
             return true;
         }
         return false;
@@ -202,22 +214,11 @@ internal class Program
         return;
     }
 
-    public static void ChangeColors(string choice)
-    {
-        if (choice == "a" || choice == "afficher")
-            Console.WriteLine("blanc");
-        else if(choice == "aj" || choice == "ajouter")
-            Console.ForegroundColor = ConsoleColor.Green;
-        else if(choice == "r" || choice == "rechercher")
-            Console.ForegroundColor = ConsoleColor.Yellow;
-        else if (choice == "s" || choice == "supprimer")
-            Console.ForegroundColor = ConsoleColor.Red;
-    }
     public static void Main()
     {
         string apple = "\U0001F34F";
         string banana = "\U0001F34C";
-        Console.Title = $" {apple} Jeu du marché {banana}";
+        Console.Title = $" {apple} Bienvenue au marché {banana}";
 
         bool loop = true;
         string[] menuOptions = ["[A]fficher", "[Aj]outer", "[R]echercher", "[S]upprimer", "[Q]uitter"];
@@ -243,7 +244,10 @@ internal class Program
             Console.Write("Saisir l'option souhaitée : ");
             choice = (Console.ReadLine() ?? "").ToLower();
             if (choice == null || choice == "")
+            {
+                Console.Clear();
                 continue;
+            }
 
             switch (choice)
             {
@@ -255,20 +259,21 @@ internal class Program
                     break;
 
                 case "ajouter" or "aj":
-                    //Console.Clear();
                     ChangeColors(choice);
                     fruit = InputFruit();
+                    
+                    Console.Clear();
+                    
                     if(IsDuplicate(fruitBasket, fruit))
                         continue;
-
+                    
                     if (!IsFruitBasketFull(fruitBasket, fruit))
                     {
                         fruitBasket = CopyOldTabValuesToNewTab(fruitBasket);
                         fruitBasket = AddFruit(fruitBasket, fruit, BASKETFRUITLIMIT);
+                        ConfirmAddBeep();
                     }
-                    
-
-                    Console.ResetColor();
+                   
                     Console.Clear();
                     break;
 
