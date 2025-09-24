@@ -12,17 +12,10 @@ internal class Program
         ///<param name="BASKETFRUITLIMIT"> Constante de type entier definissant la taille maximale du panier</param>
         ///<returns>Renvoie un tableau de string, servant à représenter le panier à fruit, après ajout d'un nouvel élément</returns>
 
-        if(IsFruitBasketFull(fruitBasket, fruit, BASKETFRUITLIMIT))
-            return fruitBasket;
+       
 
-        string[] newFruitBasket = new string[fruitBasket.Length + 1]; 
-            
-        if(fruitBasket.Length > 0)
-            newFruitBasket = CopyOldTabValuesToNewTab(fruitBasket);
-
-        newFruitBasket[fruitBasket.Length] = fruit;
-        
-        return newFruitBasket;
+        fruitBasket[fruitBasket.Length - 1] = fruit;
+        return fruitBasket;
     }
     public static void ConfirmAddBeep()
     {
@@ -50,6 +43,8 @@ internal class Program
         {
             newFruitBasket[i] = fruitBasket[i];
         }
+        Console.WriteLine($"{newFruitBasket.Length}");
+        Thread.Sleep(2000);
         return newFruitBasket;
     }
     public static void DisplayFruitBasket(string[] fruitBasket)
@@ -155,7 +150,7 @@ internal class Program
         return false;
     }
 
-    public static bool IsFruitBasketFull(string[] fruitBasket, string fruit, int BASKETFRUITLIMIT)
+    public static bool IsFruitBasketFull(string[] fruitBasket, string fruit, int BASKETFRUITLIMIT = 5)
     {
         if (fruitBasket.Length > BASKETFRUITLIMIT - 1)
         {
@@ -163,6 +158,7 @@ internal class Program
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($"Le panier est plein, \"{fruit}\" n'a donc pas été ajouté au panier");
             Console.BackgroundColor = ConsoleColor.Black;
+            Thread.Sleep(2000);
             return true;
         }
         return false;
@@ -264,7 +260,13 @@ internal class Program
                     fruit = InputFruit();
                     if(IsDuplicate(fruitBasket, fruit))
                         continue;
-                    fruitBasket = AddFruit(fruitBasket, fruit, BASKETFRUITLIMIT);
+
+                    if (!IsFruitBasketFull(fruitBasket, fruit))
+                    {
+                        fruitBasket = CopyOldTabValuesToNewTab(fruitBasket);
+                        fruitBasket = AddFruit(fruitBasket, fruit, BASKETFRUITLIMIT);
+                    }
+                    
 
                     Console.ResetColor();
                     Console.Clear();
