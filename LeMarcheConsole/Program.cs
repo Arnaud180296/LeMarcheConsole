@@ -22,9 +22,9 @@ internal class Program
             Console.WriteLine("blanc");
         else if (choice == "aj" || choice == "ajouter")
             Console.ForegroundColor = ConsoleColor.Green;
-        else if (choice == "r" || choice == "rechercher")
+        else if (choice == "r" || choice == "rechercher" || choice == "s" || choice == "supprimer")
             Console.ForegroundColor = ConsoleColor.Yellow;
-        else if (choice == "s" || choice == "supprimer")
+        else
             Console.ForegroundColor = ConsoleColor.Red;
     }
 
@@ -60,14 +60,7 @@ internal class Program
     public static void DisplayFruitBasket(string[] fruitBasket)
     {
         Console.WriteLine("Voici le contenu du panier : ");
-        //TODO : REFACTORISER, sortir resetColor, SetAlternate... Console.Clear
         SetAlternateBackgroundColor(fruitBasket);
-        
-        Console.ResetColor();
-
-        GoBackMainMenu();
-
-        Console.Clear();
         return;
     }
     
@@ -212,6 +205,7 @@ internal class Program
             Console.WriteLine($"\t> {element}");
             i++;
         }
+        
         return;
     }
 
@@ -236,7 +230,7 @@ internal class Program
          * 5 : Respecter le principe de single responsability et mettre le methode dans les cases.
          * **/
 
-        Console.WriteLine(" ATTENTION : 2 sons aigus sont émis lors de l'ajout d'un fruit, attention au volume...");
+        Console.WriteLine($"ATTENTION BAISSEZ LE VOLUME :\n2 sons aigus sont émis lors de l'ajout d'un fruit, attention au volume...");
         Thread.Sleep(6000);
         while (loop)
         {
@@ -260,6 +254,9 @@ internal class Program
                         continue;
                     Console.Clear();
                     DisplayFruitBasket(fruitBasket);
+                    
+                    Console.ResetColor();
+                    GoBackMainMenu();
                     break;
 
                 case "ajouter" or "aj":
@@ -300,7 +297,7 @@ internal class Program
                     break;
 
                 default:
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    ChangeColors(choice);
                     Console.WriteLine($"La commande : \"{choice}\" n'est pas implémenté...");
                     Thread.Sleep(850);
                     break;
