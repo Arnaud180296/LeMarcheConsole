@@ -60,6 +60,7 @@ internal class Program
     public static void DisplayFruitBasket(string[] fruitBasket)
     {
         Console.WriteLine("Voici le contenu du panier : ");
+        //TODO : REFACTORISER, sortir resetColor, SetAlternate... Console.Clear
         SetAlternateBackgroundColor(fruitBasket);
         
         Console.ResetColor();
@@ -235,9 +236,12 @@ internal class Program
          * 5 : Respecter le principe de single responsability et mettre le methode dans les cases.
          * **/
 
+        Console.WriteLine(" ATTENTION : 2 sons aigus sont émis lors de l'ajout d'un fruit, attention au volume...");
+        Thread.Sleep(6000);
         while (loop)
         {
             Console.ResetColor();
+            Console.Clear();
             
             DisplayMenu(menuOptions);
 
@@ -252,17 +256,15 @@ internal class Program
             switch (choice)
             {
                 case "afficher" or "a":
-                    Console.Clear();
                     if (IsFruitBasketEmpty(fruitBasket))
                         continue;
+                    Console.Clear();
                     DisplayFruitBasket(fruitBasket);
                     break;
 
                 case "ajouter" or "aj":
                     ChangeColors(choice);
                     fruit = InputFruit();
-                    
-                    Console.Clear();
                     
                     if(IsDuplicate(fruitBasket, fruit))
                         continue;
@@ -273,25 +275,23 @@ internal class Program
                         fruitBasket = AddFruit(fruitBasket, fruit, BASKETFRUITLIMIT);
                         ConfirmAddBeep();
                     }
-                   
-                    Console.Clear();
                     break;
 
                 case "rechercher" or "r":
-                    Console.Clear();
                     ChangeColors(choice);
                     if (IsFruitBasketEmpty(fruitBasket))
                         continue;
                     fruit = InputFruit();
+                    Console.Clear();
                     FindFruitBasket(fruitBasket, fruit);
                     break;
 
                 case "supprimer" or "s":
-                    Console.Clear();
                     ChangeColors(choice);
                     if (IsFruitBasketEmpty(fruitBasket))
                         continue;
                     fruit = InputFruit();
+                    Console.Clear();
                     fruitBasket = RemoveFruit(fruitBasket, fruit);
                     break;
 
@@ -300,9 +300,9 @@ internal class Program
                     break;
 
                 default:
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"La commande : \"{choice}\" n'est pas implémenté...");
+                    Thread.Sleep(850);
                     break;
             }
         }
