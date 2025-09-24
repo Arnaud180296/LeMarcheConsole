@@ -18,6 +18,8 @@ internal class Program
 
     public static void ChangeColors(string choice)
     {
+        ///<summary>Modifie la couleur du texte de la console selon l'etat du programme</summary>
+        ///<param name="choice">Paramètre de type string, représentant l'option choisi</param>
         if (choice == "a" || choice == "afficher")
             Console.WriteLine("blanc");
         else if (choice == "aj" || choice == "ajouter")
@@ -103,9 +105,9 @@ internal class Program
     public static void GoBackMainMenu()
     {
         Console.WriteLine("");
+        Console.ForegroundColor = ConsoleColor.Red;
         do
         {
-            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"Appuyer sur la touche \"{ConsoleKey.Enter}\" du clavier pour retourner au menu...");
         } while ((Console.ReadKey().Key != ConsoleKey.Enter));
 
@@ -225,9 +227,9 @@ internal class Program
         /* TODO
          * 1 : Implementer CopyOldTabValuesToNewTab() ✅
          * 2 : Implementer RemoveFruit()
-         * 3 : Penser à regrouper les changements de couleurs
+         * 3 : Penser à regrouper les changements de couleurs ✅
          * 4 : Tenter de surcharcher FindFruitBasket() pour quelle puisse accepter plusieurs valeurs.
-         * 5 : Respecter le principe de single responsability et mettre le methode dans les cases.
+         * 5 : Respecter le principe de single responsability et mettre le methode dans les cases. ✅
          * **/
 
         Console.WriteLine($"ATTENTION BAISSEZ LE VOLUME :\n2 sons aigus sont émis lors de l'ajout d'un fruit, attention au volume...");
@@ -264,7 +266,11 @@ internal class Program
                     fruit = InputFruit();
                     
                     if(IsDuplicate(fruitBasket, fruit))
+                    {
+                        Console.Clear();
                         continue;
+                    }
+                        
                     
                     if (!IsFruitBasketFull(fruitBasket, fruit))
                     {
