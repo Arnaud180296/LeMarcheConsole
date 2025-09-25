@@ -61,13 +61,15 @@ internal class Program
     }
     public static void DisplayFruitBasket(string[] fruitBasket)
     {
+        ///<summary>Se charge d'afficher le contenu du panier</summary>
         Console.WriteLine("Voici le contenu du panier : ");
         SetAlternateBackgroundColor(fruitBasket);
         return;
     }
     
     public static void DisplayMenu(string[] menuOptions)
-    {   
+    {
+        ///<summary>Se charge d'afficher le menu d'options disponible</summary>
         Console.WriteLine("[_Options disponible_]");
         SetAlternateBackgroundColor(menuOptions);
         Console.ResetColor();
@@ -85,6 +87,9 @@ internal class Program
     }
     public static void FindFruitBasket(string[] fruitBasket, string fruitToFind = "fruitTest")
     {
+        ///<summary>Recherche la presence d'un element de type string sans un tableau string</summary>
+        ///<param name="fruitBasket">Tableau à une dimension de chaine de caracteres</param>
+        ///<param name="fruitToFind">Chaine de caractères à ajouter</param>
         foreach (string fruit in fruitBasket)
         {
             if (fruit == fruitToFind)
@@ -104,6 +109,7 @@ internal class Program
 
     public static void GoBackMainMenu()
     {
+        ///<summary>Attends la saisie de la touche Enter.</summary>
         Console.WriteLine("");
         Console.ForegroundColor = ConsoleColor.Red;
         do
@@ -118,6 +124,8 @@ internal class Program
 
     public static string InputFruit()
     {
+        ///<summary>Recupère l'entre utilisateur à l'aide du clavier</summary>
+        ///<returns>Renvoie une chaine de caractères</returns>
         Console.Write("Saisir le nom du fruit en question : ");
         string? input = (Console.ReadLine() ?? "").ToLower();
 
@@ -130,13 +138,16 @@ internal class Program
     #region CheckMethods
     public static bool IsDuplicate(string[] fruitBasket, string fruitToCheck)
     {
+        ///<summary>Recherche la presence d'un doublons de type string dans un tableau string</summary>
+        ///<param name="fruitBasket">Tableau à une dimension de chaine de caracteres</param>
+        ///<param name="fruitToCheck">Chaine de caractères à rechercher</param>
+        ///<returns>Renvoie un boolean</returns>
+     
         Console.ForegroundColor = ConsoleColor.Yellow;
         foreach (string fruit in fruitBasket)
         {
             if (fruitToCheck == fruit)
             {
-                Console.WriteLine($"Seule une occurence de \"{fruit}\" peut etre acheté à la fois,\npar conséquent \"{fruit}\" ne sera pas ajouté au panier");
-                GoBackMainMenu();
                 return true;
             }
         }
@@ -145,6 +156,9 @@ internal class Program
 
     public static bool IsFruitBasketEmpty(string[] fruitBasket)
     {
+        ///<summary>Verifie que le tableau comporte au moins un element</summary>
+        ///<param name="fruitBasket">Tableau à une dimension de chaine de caracteres</param>
+        ///<returns>Renvoie un boolean</returns>
         if (fruitBasket.Length < 1)
         {
             Console.BackgroundColor = ConsoleColor.Red;
@@ -158,23 +172,25 @@ internal class Program
         return false;
     }
 
-    public static bool IsFruitBasketFull(string[] fruitBasket, string fruit, int BASKETFRUITLIMIT = 5)
+    public static bool IsFruitBasketFull(string[] fruitBasket, int BASKETFRUITLIMIT = 5)
     {
+        ///<summary>Verifie que le tableau ne dépasse pas la limite maximale</summary>
+        ///<param name="fruitBasket">Tableau à une dimension de chaine de caracteres</param>
+        ///<param name="BASKETFRUITLIMIT">Limite de maximale de type entier</param>
+        ///<returns>Renvoie un boolean</returns>
         if (fruitBasket.Length > BASKETFRUITLIMIT - 1)
-        {
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Le panier est plein, \"{fruit}\" n'a donc pas été ajouté au panier");
-            Console.BackgroundColor = ConsoleColor.Black;
-            Thread.Sleep(2000);
             return true;
-        }
+        
         return false;
     }
     #endregion CheckMethods
 
     public static string[] RemoveFruit(string[] fruitBasket, string fruitToRemove)
     {
+        ///<summary></summary>
+        ///<param name="fruitBasket"></param>
+        ///<param name="fruitToRemove"></param>
+        ///<returns>Renvoie un boolean</returns>
         foreach (string fruit in fruitBasket)
         {
             if (fruit == fruitToRemove)
@@ -232,8 +248,11 @@ internal class Program
          * 5 : Respecter le principe de single responsability et mettre le methode dans les cases. ✅
          * **/
 
-        Console.WriteLine($"ATTENTION BAISSEZ LE VOLUME :\n2 sons aigus sont émis lors de l'ajout d'un fruit, attention au volume...");
+        Console.WriteLine($"ATTENTION BAISSEZ LE VOLUME\n" +
+            $"ATTENTION BAISSEZ LE VOLUME\n" +
+            $"2 sons aigus sont émis lors de l'ajout d'un fruit, attention au volume...");
         Thread.Sleep(6000);
+
         while (loop)
         {
             Console.ResetColor();
@@ -268,17 +287,27 @@ internal class Program
                     if(IsDuplicate(fruitBasket, fruit))
                     {
                         Console.Clear();
+                        Console.WriteLine($"Seule une occurence de \"{fruit}\" peut etre acheté à la fois,\npar conséquent \"{fruit}\" ne sera pas ajouté au panier");
+                        GoBackMainMenu();
                         continue;
                     }
                         
                     
-                    if (!IsFruitBasketFull(fruitBasket, fruit))
+                    if (!IsFruitBasketFull(fruitBasket))
                     {
                         fruitBasket = CopyOldTabValuesToNewTab(fruitBasket);
                         fruitBasket = AddFruit(fruitBasket, fruit, BASKETFRUITLIMIT);
                         ConfirmAddBeep();
                     }
-                    break;
+                    else
+                    {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine($"Le panier est plein, \"{fruit}\" n'a donc pas été ajouté au panier");
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        Thread.Sleep(2000);
+                    }
+                        break;
 
                 case "rechercher" or "r":
                     ChangeColors(choice);
