@@ -77,13 +77,14 @@ internal class Program
     }
 
     #region FindMethods
-    public static void FindFruitBasket(string[] fruitBasket, params string[] fruitsToFind)
+    public static bool FindFruitBasket(string[] fruitBasket, params string[] fruitsToFind)
     {
         //TODO faire une surcharge de methode pour rechercher plus de 1 fruit à la fois.
         foreach (var fruit in fruitsToFind)
         {
             
         }
+        return false;
     }
     public static bool FindFruitBasket(string[] fruitBasket, string fruitToFind = "fruitTest")
     {
@@ -187,14 +188,10 @@ internal class Program
         {
             if (fruit == fruitToRemove)
             {
-                //TODO : etape de suppression (j'ai besoin de refactoriser la methode addFruit et CopyOld... avant d'implementer la suppression)
-                Console.WriteLine($"Le fruit \"{fruitToRemove}\" a été retiré du panier");
+                //TODO : etape de suppression (j'ai besoin de refactoriser la methode addFruit et CopyOld... avant d'implementer la suppression) 
                 return fruitBasket;
             }
         }
-        Console.WriteLine($"\"{fruitToRemove}\" ne se trouve pas dans le panier");
-        GoBackMainMenu();
-
         return fruitBasket;
     }
 
@@ -205,6 +202,7 @@ internal class Program
         {
             if (i % 2 == 0)
             {
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.DarkGray;
             }
             else
@@ -252,7 +250,7 @@ internal class Program
             
             DisplayMenu(menuOptions);
 
-            Console.Write("Saisir l'option souhaitée : ");
+            Console.Write("\nChoix > ");
             choice = (Console.ReadLine() ?? "").ToLower();
             if (choice == null || choice == "")
             {
@@ -323,8 +321,15 @@ internal class Program
                     Console.Clear();
 
                     if (FindFruitBasket(fruitBasket, fruit))
+                    {
                         fruitBasket = RemoveFruit(fruitBasket, fruit);
-
+                        Console.WriteLine($"Le fruit \"{fruit}\" a été retiré du panier");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"\"{fruit}\" ne se trouve pas dans le panier");
+                    }
+                    GoBackMainMenu();
                     break;
 
                 case "quitter" or "q":
