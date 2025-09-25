@@ -85,7 +85,7 @@ internal class Program
             
         }
     }
-    public static void FindFruitBasket(string[] fruitBasket, string fruitToFind = "fruitTest")
+    public static bool FindFruitBasket(string[] fruitBasket, string fruitToFind = "fruitTest")
     {
         ///<summary>Recherche la presence d'un element de type string sans un tableau string</summary>
         ///<param name="fruitBasket">Tableau à une dimension de chaine de caracteres</param>
@@ -93,17 +93,9 @@ internal class Program
         foreach (string fruit in fruitBasket)
         {
             if (fruit == fruitToFind)
-            {
-                Console.WriteLine($"Le fruit : \"{fruitToFind}\" est bel et bien dans la panier");
-                GoBackMainMenu();
-                return;
-            }
+                return true;
         }
-        Console.WriteLine($"\"{fruitToFind}\" n'existe pas dans le panier");
-
-        GoBackMainMenu();
-
-        return;
+        return false;
     }
     #endregion FindMethods
 
@@ -315,7 +307,12 @@ internal class Program
                         continue;
                     fruit = InputFruit();
                     Console.Clear();
-                    FindFruitBasket(fruitBasket, fruit);
+                    if (FindFruitBasket(fruitBasket, fruit))
+                        Console.WriteLine($"Le fruit : \"{fruit}\" est bel et bien dans la panier");
+                    else
+                        Console.WriteLine($"\"{fruit}\" n'existe pas dans le panier");
+
+                    GoBackMainMenu();
                     break;
 
                 case "supprimer" or "s":
@@ -324,7 +321,10 @@ internal class Program
                         continue;
                     fruit = InputFruit();
                     Console.Clear();
-                    fruitBasket = RemoveFruit(fruitBasket, fruit);
+
+                    if (FindFruitBasket(fruitBasket, fruit))
+                        fruitBasket = RemoveFruit(fruitBasket, fruit);
+
                     break;
 
                 case "quitter" or "q":
