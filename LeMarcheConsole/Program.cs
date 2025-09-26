@@ -1,5 +1,7 @@
 ﻿using System.Runtime.InteropServices;
+using System.Xml.Linq;
 
+//Doc string : https://learn.microsoft.com/fr-fr/dotnet/csharp/language-reference/language-specification/documentation-comments
 internal class Program
 {
     public static string[] AddFruit(string[] fruitBasket, string fruit)
@@ -204,8 +206,10 @@ internal class Program
 
     public static void SetAlternateBackgroundColor(string[] elements)
     {
-        int i = 0;
-        foreach (string element in elements)
+        ///<summary>Applique une couleur de fond à chaque element</summary>
+        ///<param name="elements">Tableau à une dimension de chaine de caracteres</param>
+       
+        for (int i = 0; i < elements.Length; i++)
         {
             if (i % 2 == 0)
             {
@@ -217,10 +221,28 @@ internal class Program
                 Console.BackgroundColor = ConsoleColor.Gray;
                 Console.ForegroundColor = ConsoleColor.Black;
             }
-            Console.WriteLine($"\t> {element}");
-            i++;
+            Console.WriteLine($"\t> {elements[i]}");
         }
+
         return;
+
+        /*
+           int i = 0; 
+           foreach (string element in elements)
+           {
+               if (i % 2 == 0)
+               {
+                   Console.ForegroundColor = ConsoleColor.White;
+                   Console.BackgroundColor = ConsoleColor.DarkGray;
+               }
+               else
+               {
+                   Console.BackgroundColor = ConsoleColor.Gray;
+                   Console.ForegroundColor = ConsoleColor.Black;
+               }
+               Console.WriteLine($"\t> {element}");
+               i++;
+       }*/
     }
 
     public static void Main()
@@ -244,7 +266,13 @@ internal class Program
          * 5 : Respecter le principe de single responsability et mettre le methode dans les cases. ✅
          * **/
 
-        
+
+        Console.WriteLine($"ATTENTION BAISSEZ LE VOLUME\n" +
+            $"ATTENTION BAISSEZ LE VOLUME\n" +
+            $"2 sons aigus sont émis lors de l'ajout d'un fruit.");
+        Thread.Sleep(8000);
+
+
         while (loop)
         {
             Console.ResetColor();
@@ -289,7 +317,7 @@ internal class Program
                     {
                         fruitBasket = CopyOldTabValuesToNewTab(fruitBasket);
                         fruitBasket = AddFruit(fruitBasket, fruit);
-                        //ConfirmAddBeep();
+                        ConfirmAddBeep();
                     }
                     else
                     {
@@ -341,7 +369,7 @@ internal class Program
                 default:
                     ChangeColors(choice);
                     Console.WriteLine($"La commande : \"{choice}\" n'est pas implémenté...");
-                    Thread.Sleep(850);
+                    Thread.Sleep(1000);
                     break;
             }
         }
