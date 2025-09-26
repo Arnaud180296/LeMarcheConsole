@@ -2,7 +2,7 @@
 
 internal class Program
 {
-    public static string[] AddFruit(string[] fruitBasket, string fruit, int BASKETFRUITLIMIT)
+    public static string[] AddFruit(string[] fruitBasket, string fruit)
     {
         ///<summary>
         /// Ajoute un element de type string à un tableau de type string.
@@ -165,7 +165,7 @@ internal class Program
         return false;
     }
 
-    public static bool IsFruitBasketFull(string[] fruitBasket, int BASKETFRUITLIMIT = 5)
+    public static bool IsFruitBasketFull(string[] fruitBasket, int BASKETFRUITLIMIT)
     {
         ///<summary>Verifie que le tableau ne dépasse pas la limite maximale</summary>
         ///<param name="fruitBasket">Tableau à une dimension de chaine de caracteres</param>
@@ -180,19 +180,26 @@ internal class Program
 
     public static string[] RemoveFruit(string[] fruitBasket, string fruitToRemove)
     {
-        ///<summary></summary>
-        ///<param name="fruitBasket"></param>
-        ///<param name="fruitToRemove"></param>
-        ///<returns>Renvoie un boolean</returns>
-        foreach (string fruit in fruitBasket)
-        {
-            if (fruit == fruitToRemove)
+        ///<summary>Retire un element du tableau d'entree.</summary>
+        ///<param name="fruitBasket">Tableau à une dimension de chaine de caracteres</param>
+        ///<param name="fruitToRemove">chaine de caractère représentant l'element cible à retire du tableau</param>
+        ///<returns>Renvoie un tableau de chaine de caractere contenant les données du tableau d'entree "fruitBasket" moins l'element à retirer "fruitToRemove"</returns>
+
+        string[] newFruitBasket = new string[fruitBasket.Length - 1];
+        int j = 0;
+        for (int i = 0; i < fruitBasket.Length; i++) {
+            //si l'element courant est different de fruitToRemove alors tu l'ajoutes au newFruitBasket.
+            //mais si l'element courant est egal à fruitToRemove, il faut ignorer afin de ne pas l'ajouter à newFruitBasket(effet de suppression)
+            //DU COUP le probleme est que I continue de s'incrementer, et donc newFruitBasket se retrouve avec une valeur vide.
+            //donc il faut continuer à parcourir fruitBasket tout en bloquant le parcours de newFruitBasket...
+            if (fruitBasket[i] != fruitToRemove) 
             {
-                //TODO : etape de suppression (j'ai besoin de refactoriser la methode addFruit et CopyOld... avant d'implementer la suppression) 
-                return fruitBasket;
+                newFruitBasket[j] = fruitBasket[i];
+                j++;
             }
         }
-        return fruitBasket;
+
+        return newFruitBasket;
     }
 
     public static void SetAlternateBackgroundColor(string[] elements)
@@ -213,7 +220,6 @@ internal class Program
             Console.WriteLine($"\t> {element}");
             i++;
         }
-        
         return;
     }
 
@@ -232,17 +238,13 @@ internal class Program
 
         /* TODO
          * 1 : Implementer CopyOldTabValuesToNewTab() ✅
-         * 2 : Implementer RemoveFruit()
+         * 2 : Implementer RemoveFruit() ✅
          * 3 : Penser à regrouper les changements de couleurs ✅
          * 4 : Tenter de surcharcher FindFruitBasket() pour quelle puisse accepter plusieurs valeurs.
          * 5 : Respecter le principe de single responsability et mettre le methode dans les cases. ✅
          * **/
 
-        Console.WriteLine($"ATTENTION BAISSEZ LE VOLUME\n" +
-            $"ATTENTION BAISSEZ LE VOLUME\n" +
-            $"2 sons aigus sont émis lors de l'ajout d'un fruit, attention au volume...");
-        Thread.Sleep(6000);
-
+        
         while (loop)
         {
             Console.ResetColor();
@@ -283,11 +285,11 @@ internal class Program
                     }
                         
                     
-                    if (!IsFruitBasketFull(fruitBasket))
+                    if (!IsFruitBasketFull(fruitBasket, BASKETFRUITLIMIT))
                     {
                         fruitBasket = CopyOldTabValuesToNewTab(fruitBasket);
-                        fruitBasket = AddFruit(fruitBasket, fruit, BASKETFRUITLIMIT);
-                        ConfirmAddBeep();
+                        fruitBasket = AddFruit(fruitBasket, fruit);
+                        //ConfirmAddBeep();
                     }
                     else
                     {
