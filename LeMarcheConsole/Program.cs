@@ -269,10 +269,10 @@ internal class Program
 
         Console.WriteLine($"ATTENTION BAISSEZ LE VOLUME\n" +
             $"ATTENTION BAISSEZ LE VOLUME\n" +
-            $"2 sons aigus sont émis lors de l'ajout d'un fruit.");
-        Thread.Sleep(8000);
+            $"2 sons aigus sont émis lors de l'ajout d'un fruit, attention au volume...");
+        Thread.Sleep(6000);
 
-
+        
         while (loop)
         {
             Console.ResetColor();
@@ -303,18 +303,16 @@ internal class Program
                 case "ajouter" or "aj":
                     ChangeColors(choice);
                     fruit = InputFruit();
-                    
-                    if(IsDuplicate(fruitBasket, fruit))
-                    {
-                        Console.Clear();
-                        Console.WriteLine($"Seule une occurence de \"{fruit}\" peut etre acheté à la fois,\npar conséquent \"{fruit}\" ne sera pas ajouté au panier");
-                        GoBackMainMenu();
-                        continue;
-                    }
-                        
-                    
+
                     if (!IsFruitBasketFull(fruitBasket, BASKETFRUITLIMIT))
                     {
+                        if (IsDuplicate(fruitBasket, fruit))
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"Seule une occurence de \"{fruit}\" peut etre acheté à la fois,\npar conséquent \"{fruit}\" ne sera pas ajouté au panier");
+                            GoBackMainMenu();
+                            continue;
+                        }
                         fruitBasket = CopyOldTabValuesToNewTab(fruitBasket);
                         fruitBasket = AddFruit(fruitBasket, fruit);
                         ConfirmAddBeep();
